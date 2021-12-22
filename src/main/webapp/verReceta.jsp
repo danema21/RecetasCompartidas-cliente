@@ -113,6 +113,10 @@
 			margin-left: 5px;
 			margin-bottom: 5px;
 		}
+		
+		#pasoHablado{
+			background-color: rgb(255, 100, 100);
+		}
 	</style>
 	
 	<body>
@@ -163,19 +167,34 @@
 				botones.append($('<a id="btn-siguiente" class="btn btn-danger" onclick="audioSiguiente()">Siguiente</a>'));
 			}
 			
-			function quitarBotones(){
+			function quitarAgregados(){
 				$('#btn-atras').remove();
 				$('#btn-siguiente').remove();
+				$('#pasoHablado').remove();
 			}
 			
 			function audioAtras(){
 				if(pasoActual > 0){
 					pasoActual--;
+					let msg = document.getElementById("proceso").innerHTML;
+	        		let msgArr = msg.split('.');
+	        		let body = $('.card-body');
+	        		$('#pasoHablado').html("Paso " + pasoActual + ": " + msgArr[pasoActual]);
 				}
 			}
 			
 			function audioSiguiente(){
-				pasoActual++;
+				let msg = document.getElementById("proceso").innerHTML;
+        		let msgArr = msg.split('.');
+        		let body = $('.card-body');
+        		
+        		if(pasoActual < msgArr.length-2){
+        			pasoActual++;
+        			$('#pasoHablado').html("Paso " + pasoActual + ": " + msgArr[pasoActual]);
+        		}else if(pasoActual == msgArr.length-2){
+        			pasoActual++;
+        			$('#pasoHablado').html("Fin");
+        		}
 			}
 		
             function textToAudio() {
@@ -183,13 +202,18 @@
             		document.getElementById("btn-hablar").innerHTML = "Play";
             		agregarBotones();
             		pasoActual++;
+            		let msg = document.getElementById("proceso").innerHTML;
+            		let msgArr = msg.split('.');
+            		let body = $('.card-body');
+            		body.append($('<p id="pasoHablado"></p>'));
+            		$('#pasoHablado').html("Paso " + pasoActual + ": " + msgArr[0]);
             	}else{
   					let msg = document.getElementById("proceso").innerHTML;
 	                let msgArr = msg.split('.');
 	                
 	                if(pasoActual >= msgArr.length-1){
 	                	pasoActual = -1;
-	                	quitarBotones();
+	                	quitarAgregados();
 	                	document.getElementById("btn-hablar").innerHTML = "Asistente de voz";
 	                }else{
 		                msg = msgArr[pasoActual];
@@ -205,7 +229,7 @@
 		                window.speechSynthesis.speak(speech);
 		                if(pasoActual >= msgArr.length-1){
 		                	pasoActual = -1;
-		                	quitarBotones();
+		                	quitarAgregados();
 		                	document.getElementById("btn-hablar").innerHTML = "Asistente de voz";
 		                }
 	                }
