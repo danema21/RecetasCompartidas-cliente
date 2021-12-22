@@ -48,6 +48,12 @@ public class RegistrarUsuario extends HttpServlet {
 		String confPassword = request.getParameter("inputConfPassword");
 		String urlImagen = request.getParameter("inputPerfil");
 		
+		if(urlImagen.isEmpty()) {
+			urlImagen = "img/defaultUserIcon";
+		}else {
+			urlImagen = "img/users/" + urlImagen;
+		}
+		
 		
 		if(password.equals(confPassword)) {
 			try {

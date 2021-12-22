@@ -47,6 +47,8 @@ public class RegistrarReceta extends HttpServlet {
 		
 		if(inputPerfil.isEmpty()) {
 			inputPerfil = "img/defaultRecipeImg.png";
+		}else {
+			inputPerfil = "img/recipes/" + inputPerfil;
 		}
 		
 		if(inputNombre.isEmpty()) {
