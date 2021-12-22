@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    
+<%@page import="publicadores.DtUsuario"%>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -99,7 +101,7 @@
 			}
 			
 			.btn{
-				width: 200px;
+				width: 100%;
 				display: block;
 				margin: auto;
 				background-color: orange;
@@ -120,25 +122,44 @@
 		
 		<div class="container">
 			<div class="d-flex justify-content-center h-100">
-				<div class="card">
-					<div class="card-header text-center">
-						<h2>Ajustes de usuario</h2>
+				<div class="card-group">
+					<div class="card">
+						<div class="card-header text-center">
+							<h2>Perfil</h2>
+						</div>
+						<div class="card-body">
+							<form action="RegistrarUsuario" method="post">
+								<div class="picture-container mb-4">
+							        <div class="picture d-flex mb-2">
+							            <img src="img/defaultUserIcon.jpg" class="picture-src" id="wizardPicturePreview" title="">
+							            <input accept="image/*" name="inputPerfil" type="file" id="wizard-picture" class="form-control">
+							        </div>
+							        <h6 id="imgFooter" class="labelPefil"><%=session.getAttribute("idUsuario") %></h6>
+							    </div>
+							</form>
+						</div>
+						<div class="card-footer">
+							<a class="btn" href="CerrarSesion">
+							  	Cerrar Sesion
+							</a>
+						</div>
 					</div>
-					<div class="card-body">
-						<form action="RegistrarUsuario" method="post">
-							<div class="picture-container mb-4">
-						        <div class="picture d-flex mb-2">
-						            <img src="img/defaultUserIcon.jpg" class="picture-src" id="wizardPicturePreview" title="">
-						            <input accept="image/*" name="inputPerfil" type="file" id="wizard-picture" class="form-control">
-						        </div>
-						        <h6 id="imgFooter" class="labelPefil">Editar foto de perfil</h6>
-						    </div>
-						</form>
+					<div class="card">
+						<div class="card-header text-center">
+							<h2>Usuarios bloqueados</h2>
+						</div>
+						<div class="card-body">
+						
+						</div>
 					</div>
-					<div class="card-footer">
-						<a class="btn" href="CerrarSesion">
-						  	Cerrar Sesion
-						</a>
+					<div class="card">
+						<div class="card-header text-center">
+							<h2>Usuarios</h2>
+						</div>
+						<div class="card-body">
+						
+							<p style="color:white"><%=((DtUsuario[])request.getAttribute("usuarios"))[0].getIdDeUsuario() %></p>
+						</div>
 					</div>
 				</div>
 			</div>

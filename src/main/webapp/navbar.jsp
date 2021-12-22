@@ -8,6 +8,7 @@
     	<form action="ConsultarNovedades" method="post" id="formMenuPrincipal"></form>
     	<form action="ConsultaReceta" method="post" id="formBuscarRecetas"></form>
         <form action="RegistrarReceta" method="post" id="formPublicarReceta"></form>
+        <form action="AdministrarUsuarios" method="post" id="formAdministrarUsuarios"></form>
         
         <ul class="navbar-nav ml-auto">
             <div class="hori-selector"><div class="left"></div><div class="right"></div></div>
@@ -21,7 +22,7 @@
                 <a onclick="setTimeout(function(){location.href='publicarReceta.jsp'}, 800)" class="nav-link" href="javascript:void(0);"><i class="fas fa-plus"></i>Publicar Receta</a>
             </li>
             <li id="miPerfil" class="nav-item">
-                <a href="javascript:setTimeout(function(){window.location = 'perfil.jsp'}, 800)" class="nav-link" href="javascript:void(0);"><i class="fas fa-user-alt"></i>Mi Perfil</a>
+                <a onclick="setTimeout(function(){document.getElementById('formAdministrarUsuarios').submit()}, 800)" class="nav-link" href="javascript:void(0);"><i class="fas fa-user-alt"></i>Mi Perfil</a>
             </li>
         </ul>
     </div>

@@ -3,7 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.rmi.RemoteException;
 
-import javax.jws.WebMethod;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -41,9 +41,35 @@ public class AdministrarUsuarios extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		DtUsuario[] dtusuarios = null;
+		DtUsuario[] dtusuariosBloqueados = null;
 		
+		try {
+			dtusuarios = listarUsuariosNoBaneados();
+		} catch (RemoteException | ServiceException e) {
+			e.printStackTrace();
+			RequestDispatcher rd;
+			request.setAttribute("mensaje", "Algo ocurrio al listar los usuarios");
+			rd = request.getRequestDispatcher("/notificacion.jsp");
+			rd.forward(request, response);
+		}
 		
-		doGet(request, response);
+		try {
+			dtusuariosBloqueados = listarUsuariosBaneados();
+		} catch (RemoteException | ServiceException e) {
+			e.printStackTrace();
+			RequestDispatcher rd;
+			request.setAttribute("mensaje", "Algo ocurrio al listar los usuarios bloqueados");
+			rd = request.getRequestDispatcher("/notificacion.jsp");
+			rd.forward(request, response);
+		}
+		
+		request.setAttribute("usuarios", dtusuarios);
+		request.setAttribute("bloqueados", dtusuariosBloqueados);
+		
+		RequestDispatcher rd;
+		rd = request.getRequestDispatcher("/perfil.jsp");
+		rd.forward(request, response);
 	}
 	
 	public DtUsuario[] listarUsuariosNoBaneados() throws ServiceException, RemoteException {
