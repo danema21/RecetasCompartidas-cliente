@@ -53,7 +53,7 @@
 		
 		@media(max-width: 599px){
 			.card{
-				width: 12rem;
+				width: 80%;
 			}
 		}
 		
