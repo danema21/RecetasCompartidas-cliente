@@ -51,9 +51,20 @@
 			text-align: center;
 		}
 		
+		.card.usuario{
+			flex-direction: row; 
+			color: white;
+			background-color: rgba(0,0,0, 0.5);
+		}
+		
 		@media(max-width: 599px){
 			.card{
 				width: 80%;
+			}
+			
+			.card-img{
+				width: 25%;
+				height: 50%;
 			}
 		}
 		
@@ -61,11 +72,14 @@
 			.card{
 				width: 18rem;
 			}
+			
+			.card-img{
+				width: 25%;
+				height: auto;
+			}
 		}
 		
-		.card-img-top{
-			height: 180px;
-		}
+		
 		
 		.btn{
 			color: orange;
@@ -96,18 +110,19 @@
 				}
 				
 				for(DtNotificacion dtn : dtnOrdenMasNuevo){%>
-					<div class="card">
-							<img src=<%=dtn.getImagenDeReceta() %> class="card-img-top" alt="...">
-							<div class="card-body">
-						    	<h5 class="card-title"><b><%=dtn.getAutorDeReceta() %></b> publicó: <%=dtn.getNombreReceta() %></h5>
-						        <h6 class="card-subtitle"><i>el <%=dtn.getFechaDePublicacion() %></i></h6>
-							</div>
-							<div class="card-footer">
-								<form action="ConsultaReceta" method="post">
-									<input value="<%=dtn.getNombreReceta()%>" name="inputNombreReceta" class="form-control" style="opacity: 0"></input>
+					<div class="card usuario mb-4 p-2 w-100">
+						<img class="card-img" src="<%=dtn.getImagenDeReceta()%>" alt="Card image">
+						<div class="card-body w-75">
+						    <h4 class="card-title"><b><%=dtn.getAutorDeReceta() %></b></h4>
+						    <p class="card-text">publicó: <%=dtn.getNombreReceta() %> el <i><%=dtn.getFechaDePublicacion() %></i></p>
+					    
+					    	<div class="card-footer">
+					    		<form action="ConsultaReceta" method="post">
+					    			<input value="<%=dtn.getNombreReceta()%>" name="inputNombreReceta" class="form-control" style="opacity: 0"></input>
 									<a href="#" onclick="this.parentNode.submit();" class="btn mr-2"><i class="fas fa-link"></i> Ver Receta</a>
-								</form>
-							</div>
+					    		</form>
+					    	</div>
+					    </div>
 					</div>
 				<%} %>
 			<%}else{ %>
