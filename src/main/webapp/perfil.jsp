@@ -42,9 +42,13 @@
 				align-content: center;
 			}
 			
+			.card-group{
+				margin-top: 40px;
+			}
+			
 			.card{
 				height: 400px;
-				margin-top: 40px;
+				margin: 2px;
 				width: 300px;
 				background-color: rgba(0,0,0,0.5) !important;
 			}
@@ -144,21 +148,33 @@
 							</a>
 						</div>
 					</div>
-					<div class="card">
-						<div class="card-header text-center">
-							<h2>Usuarios bloqueados</h2>
+					<%DtUsuario[] dtu = (DtUsuario[])request.getAttribute("usuarios");
+					  DtUsuario[] dtuBloqueados = (DtUsuario[])request.getAttribute("bloqueados");%>
+					  
+					<%if(session.getAttribute("idUsuario").equals("d-dalto")) {%>
+						<div class="card">
+							<div class="card-header text-center">
+								<h2>Usuarios bloqueados</h2>
+							</div>
+							<div class="card-body">
+								<%if(dtuBloqueados != null){ %>
+									<%for(DtUsuario ublk : dtuBloqueados){ %>
+										<p style="color:white"><%=ublk.getIdDeUsuario() %></p>
+									<%} %>
+								<%} %>
+							</div>
 						</div>
-						<div class="card-body">
-						
-						</div>
-					</div>
+					<%} %>
 					<div class="card">
 						<div class="card-header text-center">
 							<h2>Usuarios</h2>
 						</div>
 						<div class="card-body">
-						
-							<p style="color:white"><%=((DtUsuario[])request.getAttribute("usuarios"))[0].getIdDeUsuario() %></p>
+							<%if(dtu != null) {%>
+								<%for(DtUsuario u : dtu){ %>
+									<p style="color:white"><%=u.getIdDeUsuario() %></p>
+								<%} %>
+							<%} %>
 						</div>
 					</div>
 				</div>
