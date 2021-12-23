@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.xml.rpc.ServiceException;
 
 import publicadores.ControladorAdministrarUsuariosPublish;
@@ -43,6 +44,47 @@ public class AdministrarUsuarios extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DtUsuario[] dtusuarios = null;
 		DtUsuario[] dtusuariosBloqueados = null;
+		String bloqueado = request.getParameter("bloquear");
+		String desbloqueado = request.getParameter("desbloquear");
+		String eliminado = request.getParameter("eliminar");
+		
+		HttpSession sesion = request.getSession();
+		
+		if(bloqueado != null) {
+			try {
+				bloquearUsuario(bloqueado, (String)sesion.getAttribute("idUsuario"));
+			} catch (RemoteException | ServiceException e) {
+				e.printStackTrace();
+				RequestDispatcher rd;
+				request.setAttribute("mensaje", "Algo ocurrio al intentar bloquear el usuario");
+				rd = request.getRequestDispatcher("/notificacion.jsp");
+				rd.forward(request, response);
+			}
+		}
+		
+		if(desbloqueado != null) {
+			try {
+				desbloquearUsuario(desbloqueado, (String)sesion.getAttribute("idUsuario"));
+			} catch (RemoteException | ServiceException e) {
+				e.printStackTrace();
+				RequestDispatcher rd;
+				request.setAttribute("mensaje", "Algo ocurrio al intentar desbloquear el usuario");
+				rd = request.getRequestDispatcher("/notificacion.jsp");
+				rd.forward(request, response);
+			}
+		}
+		
+		if(eliminado != null) {
+			try {
+				eliminarUsuario(eliminado, (String)sesion.getAttribute("idUsuario"));
+			} catch (RemoteException | ServiceException e) {
+				e.printStackTrace();
+				RequestDispatcher rd;
+				request.setAttribute("mensaje", "Algo ocurrio al intentar eliminar el usuario");
+				rd = request.getRequestDispatcher("/notificacion.jsp");
+				rd.forward(request, response);
+			}
+		}
 		
 		try {
 			dtusuarios = listarUsuariosNoBaneados();

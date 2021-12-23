@@ -49,7 +49,7 @@ public class RegistrarUsuario extends HttpServlet {
 		String urlImagen = request.getParameter("inputPerfil");
 		
 		if(urlImagen.isEmpty()) {
-			urlImagen = "img/defaultUserIcon";
+			urlImagen = "img/defaultUserIcon.jpg";
 		}else {
 			urlImagen = "img/users/" + urlImagen;
 		}

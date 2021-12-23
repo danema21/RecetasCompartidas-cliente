@@ -46,15 +46,28 @@
 				margin-top: 40px;
 			}
 			
-			.card{
+			.card.contenedor{
 				height: 400px;
-				margin: 2px;
+				margin: 5px;
 				width: 300px;
 				background-color: rgba(0,0,0,0.5) !important;
+				overflow-y: auto; 
+			}
+			
+			.card.usuario{
+				flex-direction: row; 
+				color: black;
+				background-color: white;
+				overflow-y: auto; 
 			}
 			
 			.card-header h2{
 				color: white;
+			}
+			
+			.card-img{
+				width: 25%;
+				height: 25%;
 			}
 			
 			input:focus{
@@ -127,7 +140,10 @@
 		<div class="container">
 			<div class="d-flex justify-content-center h-100">
 				<div class="card-group">
-					<div class="card">
+					<%DtUsuario[] dtu = (DtUsuario[])request.getAttribute("usuarios");
+					  DtUsuario[] dtuBloqueados = (DtUsuario[])request.getAttribute("bloqueados");%>
+					  
+					<div class="card contenedor">
 						<div class="card-header text-center">
 							<h2>Perfil</h2>
 						</div>
@@ -135,7 +151,31 @@
 							<form action="RegistrarUsuario" method="post">
 								<div class="picture-container mb-4">
 							        <div class="picture d-flex mb-2">
-							            <img src="img/defaultUserIcon.jpg" class="picture-src" id="wizardPicturePreview" title="">
+							        	<%
+							        	int i = 0;
+							        	while(i < dtu.length && !dtu[i].getIdDeUsuario().equals((String)session.getAttribute("idUsuario"))){
+							        		i++;
+							        	}%>
+							        	
+							        	<%
+							        	int j = 0;
+							        	boolean estaBloqueado = false;
+							        	while(j < dtuBloqueados.length && !dtuBloqueados[j].getIdDeUsuario().equals((String)session.getAttribute("idUsuario"))){
+							        		j++;
+							        	}
+							        	
+							        	if(j < dtuBloqueados.length && dtuBloqueados[j].getIdDeUsuario().equals((String)session.getAttribute("idUsuario"))){
+						        			estaBloqueado = true;
+						        		}
+							        	%>
+							        	
+							        	<%if(i < dtu.length && dtu[i].getImagenDePerfil() != null){ %>
+							            	<img src="<%=dtu[i].getImagenDePerfil() %>" class="picture-src" id="wizardPicturePreview" title="">
+							            <%}else if(estaBloqueado){ %>
+							            	<img src="img/blockedUserIcon.jpg" class="picture-src" id="wizardPicturePreview" title="">
+							            <%}else{ %>
+							            	<img src="img/defaultUserIcon.jpg" class="picture-src" id="wizardPicturePreview" title="">
+							            <%} %>
 							            <input accept="image/*" name="inputPerfil" type="file" id="wizard-picture" class="form-control">
 							        </div>
 							        <h6 id="imgFooter" class="labelPefil"><%=session.getAttribute("idUsuario") %></h6>
@@ -148,31 +188,64 @@
 							</a>
 						</div>
 					</div>
-					<%DtUsuario[] dtu = (DtUsuario[])request.getAttribute("usuarios");
-					  DtUsuario[] dtuBloqueados = (DtUsuario[])request.getAttribute("bloqueados");%>
 					  
 					<%if(session.getAttribute("idUsuario").equals("d-dalto")) {%>
-						<div class="card">
+						<div class="card contenedor">
 							<div class="card-header text-center">
-								<h2>Usuarios bloqueados</h2>
+								<h2>Lista negra</h2>
 							</div>
 							<div class="card-body">
 								<%if(dtuBloqueados != null){ %>
 									<%for(DtUsuario ublk : dtuBloqueados){ %>
-										<p style="color:white"><%=ublk.getIdDeUsuario() %></p>
+										<div class="card usuario mb-4 p-2 w-100">
+											<%if(ublk.getImagenDePerfil() != null){ %>
+												<img class="card-img" src="<%=ublk.getImagenDePerfil()%>" alt="Card image">
+											<%}else{ %>
+												<img class="card-img" src="img/defaultUserIcon.jpg" alt="Card image">
+											<%} %>
+											<div class="card-body w-75">
+										  
+											    <h4 class="card-title"><%=ublk.getIdDeUsuario()%></h4>
+											    <p class="card-text"><%=ublk.getNombre()%> <%=ublk.getApellido() %></p>
+										    
+											    <form action="AdministrarUsuarios" method="post" style="margin-bottom: 10px;">
+												    <button type="submit" name="desbloquear" value="<%=ublk.getIdDeUsuario()%>" class="btn">Desbloquear</button>
+											    </form>
+											    <form action="AdministrarUsuarios" method="post">
+											    	<button type="submit" name="eliminar" value="<%=ublk.getIdDeUsuario() %>" class="btn">Eliminar</button>
+											    </form>
+										    </div>
+										</div>
 									<%} %>
 								<%} %>
 							</div>
 						</div>
 					<%} %>
-					<div class="card">
+					<div class="card contenedor">
 						<div class="card-header text-center">
 							<h2>Usuarios</h2>
 						</div>
 						<div class="card-body">
 							<%if(dtu != null) {%>
 								<%for(DtUsuario u : dtu){ %>
-									<p style="color:white"><%=u.getIdDeUsuario() %></p>
+									<div class="card usuario mb-4 p-2 w-100">
+										<%if(u.getImagenDePerfil() != null){ %>
+											<img class="card-img" src="<%=u.getImagenDePerfil()%>" alt="Card image">
+										<%}else{ %>
+											<img class="card-img" src="img/defaultUserIcon.jpg" alt="Card image">
+										<%} %>
+										<div class="card-body w-75">
+									  
+										    <h4 class="card-title"><%=u.getIdDeUsuario()%></h4>
+										    <p class="card-text"><%=u.getNombre()%> <%=u.getApellido() %></p>
+									    
+									    	<%if(session.getAttribute("idUsuario").equals("d-dalto")) {%>
+											    <form action="AdministrarUsuarios" method="post">
+												    <button type="submit" name="bloquear" value="<%=u.getIdDeUsuario()%>" class="btn">Bloquear</button>
+											    </form>
+											   <%} %>
+									    </div>
+									</div>
 								<%} %>
 							<%} %>
 						</div>

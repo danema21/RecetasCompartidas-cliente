@@ -85,6 +85,11 @@
 			color: white;
 		}
 		
+		.card-img{
+			width: 100%;
+			height: 100%;
+		}
+		
 		#ingredientes{
 			height: 50px;
 			overflow: auto;
